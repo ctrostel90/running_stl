@@ -55,7 +55,7 @@ mod tests{
     #[test]
     fn test_unit_vec_projected(){
         let pt = Point::new(1.0,1.0,10.0);
-        let val = pt.unit_vector();
+        let val = pt.unit_vector_projected();
         println!("{val:?}");
         assert!((val.x - 0.7071).abs() < 0.0001);
         assert!((val.y - 0.7071).abs() < 0.0001);
