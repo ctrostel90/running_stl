@@ -1,3 +1,5 @@
+use std::{f64::consts::PI, ops::{Add, Mul}};
+
 #[derive(Debug)]
 pub struct Point{
     x:f64,
@@ -39,12 +41,42 @@ impl Point{
         let cos_theta = dot / (mag1 * mag2);
         cos_theta.acos()
     }
+
+    pub fn surrounding_points(pt1:&Point,pt2:&Point,pt3:&Point,radius:f64) -> (Point,Point){
+        let vec21 = Point::new(pt2.x - pt1.x,pt2.y - pt1.y,pt2.z - pt1.z);
+        let vec23 = Point::new(pt2.x - pt3.x,pt2.y - pt3.y,pt2.z - pt3.z);
+        let angle_between = Point::angle_between(&vec21,&vec23);
+
+        if (angle_between * 100.0).round() / 100.0 == (PI * 100.0).round() / 100.0 {
+            return (
+                Point::new(-pt2.y,pt2.x,pt2.z).unit_vector() * -radius + pt2,
+                Point::new(-pt2.y,pt2.x,pt2.z).unit_vector() * radius + pt2,
+            )
+        }
+        else {
+            
+        }
+
+    }
 }
 impl PartialEq for Point{
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && 
         self.y == other.y &&
         self.z == other.z
+    }
+}
+
+impl Mul<f64> for Point{
+    type Output = Point;
+    fn mul(self, rhs: f64) -> Self::Output {
+        Point::new(self.x * rhs, self.y * rhs, self.z * rhs)
+    }
+}
+impl<'a,'b> Add<&'b Point> for &'a Point{
+    type Output = Point;
+    fn add(self, rhs: &'b Point) -> Self::Output {
+        Point::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
     }
 }
 #[cfg(test)]
