@@ -31,6 +31,14 @@ impl Point{
     pub fn dot_product(&self,other:&Point) -> f64{
         self.x * other.x + self.y * other.y + self.z * other.z
     }
+
+    pub fn angle_between(pt1:&Point,pt2:&Point) -> f64{
+        let dot = pt1.dot_product(pt2);
+        let mag1 = pt1.magnitude();
+        let mag2 = pt2.magnitude();
+        let cos_theta = dot / (mag1 * mag2);
+        cos_theta.acos()
+    }
 }
 impl PartialEq for Point{
     fn eq(&self, other: &Self) -> bool {
@@ -41,6 +49,8 @@ impl PartialEq for Point{
 }
 #[cfg(test)]
 mod tests{
+    use core::f64;
+
     use super::*;
 
     #[test]
@@ -69,4 +79,13 @@ mod tests{
         let result = pt1.dot_product(&pt2);
         assert!((result - 12.0).abs() < f64::EPSILON);
     }
+
+    #[test]
+    fn test_angle_between(){
+        let pt1 = Point::new(1.0,0.0,0.0);
+        let pt2 = Point::new(-1.0,0.0,0.0);
+
+        assert!(Point::angle_between(&pt1,&pt2) - f64::consts::PI < f64::EPSILON);
+    }
+
 }
